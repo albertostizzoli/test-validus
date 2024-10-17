@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validus Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            Ext.create('Ext.form.Panel', {
+                renderTo: 'formPanel',
+                scrollable: true,
+                title: 'Register',
+                margin: 150,
+                width: 355,
+                bodyPadding: 10,
+
+                fieldDefaults: {
+                    labelAlign: "right",
+                    labelWidth: 115,
+                    msgTarget: 'side'
+                },
+                items: [
+                    {
+                        xtype: 'fieldset', // Primo form "User Info"
+                        title: 'User Info',
+                        defaultType: 'textfield',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        items: [
+                            {
+                                fieldLabel: 'User ID:',
+                                name: 'userId',
+                                emptyText: 'user id',
+                                allowBlank: false
+                            },
+                            {
+                                fieldLabel: 'Password:',
+                                name: 'password',
+                                emptyText: 'password',
+                                inputType: 'password',
+                                allowBlank: false
+                            },
+                            {
+                                fieldLabel: 'Verify:',
+                                name: 'verifyPassword',
+                                emptyText: 'password',
+                                inputType: 'password',
+                                allowBlank: false
+                            }
+                        ]
+                    },
+                    {
+                        xtype: 'fieldset', // Secondo form "Contact Information"
+                        title: 'Contact Information',
+                        defaultType: 'textfield',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        items: [
+                            {
+                                fieldLabel: 'First Name:',
+                                name: 'firstName',
+                                emptyText: 'First Name',
+                                allowBlank: false
+                            },
+                            {
+                                fieldLabel: 'Last Name:',
+                                name: 'lastName',
+                                emptyText: 'Last Name',
+                                allowBlank: false
+                            },
+                            {
+                                fieldLabel: 'Company:',
+                                name: 'company'
+                            },
+                            {
+                                fieldLabel: 'Email:',
+                                name: 'email',
+                                vtype: 'email',
+                                allowBlank: false
+                            },
+                            {
+                                fieldLabel: 'State:',
+                                emptyText: 'State',
+                                name: 'state'
+                            },
+                            {
+                                xtype: 'datefield',
+                                fieldLabel: 'Date of Birth:',
+                                name: 'regDate',
+                                allowBlank: false,
+                                format: 'Y-m-d'
+                            }
+                        ]
+                    }
+                ],
+                buttons: [
+                    {
+                        text: 'Register',
+                        formBind: true, // Abilita il pulsante solo se tutti i campi sono validi
+                        disabled: true,
+                        handler: function () {
+                            const form = this.up('form').getForm();
+                            if (form.isValid()) {
+                                form.submit({
+                                    url: 'server.php', // URL del file PHP che riceve i dati
+                                    method: 'POST',
+                                    success: function (form, action) {
+                                        console.log(action.result); // Log per verificare la risposta dal server
+                                        Ext.Msg.alert('Successo', action.result.message);
+                                    },
+                                    failure: function (form, action) {
+                                        console.log(action.result); // Log per debug
+                                        Ext.Msg.alert('Errore', action.result ? action.result.message : 'I dati non sono stati inseriti');
+                                    }
+                                });
+                            }
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center align-items-center">
+        <div id="formPanel"></div>
+    </div>
+</body>
+
+</html>
